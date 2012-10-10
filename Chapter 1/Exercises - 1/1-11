@@ -1,0 +1,1 @@
+I would test the word count program for bugs by giving it many different kinds of input, such as multiple newlines or tabs in a row. Input with newlines, tabs, and blanks placed in unusual places is most likely to uncover bugs.
