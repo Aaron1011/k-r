@@ -5,24 +5,24 @@
 main()
 {
     int c, i, l, not_empty;
-    int characters[MAXCHAR - 33];
+    int characters[MAXCHAR - MINCHAR];
     
-    for (i = 0; i < MAXCHAR - 33; i++)
+    for (i = 0; i < MAXCHAR - MINCHAR; i++)
         characters[i] = 0;
 
     while ((c = getchar()) != EOF)
     {
-        if (c - '0' >= MINCHAR && c - '0' <= MAXCHAR)
-           characters[c - 33] += 1;
+        if (c >= MINCHAR && c <= MAXCHAR)
+            characters[c - MINCHAR] += 1;
     }
     printf("Character lengths:\n");
 
-    for (i = 0; i < MAXCHAR - 33; i++)
+    for (i = 0; i < MAXCHAR - MINCHAR; i++)
     {
         not_empty = (characters[i] != 0);
         if (not_empty)
         {
-            printf("%c: ", (i + 33));
+            printf("%c: ", (i + MINCHAR));
             for (l = 0; l < characters[i]; l++)
                 printf("*");
             printf("\n"); 
