@@ -1,44 +1,48 @@
 #include <stdio.h>
 #define MAXLINE 1000
 
-int getline(char s[], int lim)
-char reverse(char string[], char reverse[]);
+int mygetline(char s[], int lim);
+int reverse(char string[]);
+void copy(char to[], char from[]);
 
 int main()
 {
     char line[MAXLINE];
-    char backwards;
-    char backwards2;
+    int len, i;
 
-    while ((len = getline(line, MAXLINE)) > 0)
+    for (i = 0; i <= MAXLINE; ++i)
+        line[i] = 0;
+
+    while ((len = mygetline(line, MAXLINE)) > 0)
     {
-        backwards2 = reverse(line, backwards);
-        printf("%s", backwards2);
+        reverse(line);
+        printf("%s", line);
     }
     return 0;
 }
 
-int reverse(char s[], char reverse[])
+int reverse(char s[])
 {
     int len, i;
-    
+    char copied[MAXLINE];
 
-    for (len = 0; len != '\0'; ++len)
-        ++len;
+    copy(copied, s);    
 
-    char backwards[len];
- 
+    for (len = 0; ; ++len)
+        if (s[len] == '\n')
+            break;
+    printf("%i", len);
     for (i = 0; i <= len; ++i)
-        backwards[len = i] = s[i];
+        s[len - i] = copied[i];
 
     
     return 0; 
-
-int getline(char s[], int lim)
+}
+int mygetline(char s[], int lim)
 {
     int c, i;
 
-    for (i = 0; (c = getchar()) != EOF && (c != '\n' || c != ' '; ++i))
+    for (i = 0; c = getchar() != EOF && c != '\n'; ++i)
     {
         if (i < lim - 1)
             s[i] = c;
@@ -50,4 +54,13 @@ int getline(char s[], int lim)
     }
     s[i] = '\0';
     return i;
+}
+
+void copy(char to[], char from[])
+{
+    int i;
+
+    i = 0;
+    while ((to[i] = from[i]) != '\0')
+        ++i;
 }
