@@ -1,14 +1,14 @@
 #include <stdio.h>
 #define MAXLINE 1000
 
-int getline(char line[], int maxline);
+int aaronsgetline(char line[], int maxline);
 
 main()
 {
     int len;
     char line[MAXLINE];
 
-    while ((len = getline(line, MAXLINE)) > 0)
+    while ((len = aaronsgetline(line, MAXLINE)) > 0)
         if (len != 1)
             printf("%s\n", line);
     return 0;
@@ -16,7 +16,7 @@ main()
             
 
 
-int getline(char s[], int lim)
+int aaronsgetline(char s[], int lim)
 {
     int c, i, orig;
 
@@ -24,20 +24,19 @@ int getline(char s[], int lim)
         if (i < lim - 1)
             s[i] = c;
     orig = i;
+    i--;
     for (i; i >= 0; --i)
     {
         if (s[i] == ' ' || s[i] == '\t')
+        {
+            printf("Hit space/tab\n");
             s[i] = '\0';
+        }
         else
             break;
     }
-    if (c == '\n')
-    {
-        s[orig] = c;
-        ++orig;
-    }
-        
-    s[orig] = '\0';
+    s[orig] = c;
+    s[orig + 1] = '\0';
    
     return orig;
 }
