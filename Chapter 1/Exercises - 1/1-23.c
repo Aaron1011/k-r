@@ -5,6 +5,7 @@
 main() /* Remove comments from input */
 {
     int state = OUT;
+    int c;
 
     while ((c = getchar()) != EOF)
     {
