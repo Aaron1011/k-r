@@ -1,24 +1,47 @@
 #include <stdio.h>
 #define LINECOL 20 /* "fold" after this column */
+void upto(char s[], int i);
 
 int main()
 {
-    int c, place;
-    int str[LINECOL];
+    int c, i, j, lastchar;
+    char str[LINECOL];
+    for (i = 0; i <= LINECOL; i++)
+        str[i] = 0;
 
-    place = 1;
+    i = 0;
+    lastchar = -1;
 
     while ((c = getchar()) != EOF)
     {
-        if (place > LINECOL)
+        if (c != ' ' && c != '\t' && c!= '\n')
+            lastchar = i;
+        if (i == LINECOL - 1)
         {
-            if (c == ' ' || c == '\t'
-            printf("\n%c", c);
-            place = 1;
+            str[i] = c;
+            upto(str, lastchar);
+                      
+            i = 0;
+            lastchar = -1;
         }
         else
-            printf("%c", c);
-        ++place;
+        {
+            str[i] = c;
+            if (c == '\n')
+                upto(str, lastchar);
+            ++i;
+        }
+     
     }
     return 0;
+}
+
+void upto(char s[], int stop)
+{
+    int j;
+    for (j = 0; j <= stop; j++)
+        printf("%c", s[j]);
+
+    if (stop >= 0)
+        putchar('\n');
 }
