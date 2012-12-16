@@ -2,6 +2,7 @@
 #define IN 0
 #define OUT 1
 #define QUOTE 2
+#define SLASH 3
 main() /* Remove comments from input */
 {
     int state = OUT;
@@ -19,15 +20,25 @@ main() /* Remove comments from input */
         }
         else if (c == '/')
         {
-            if (state == IN)
+			if (state == SLASH)
+				state = IN;
+            else if (state == IN)
                 state = OUT;
             else if (state == QUOTE)
                 putchar(c);
-            else 
-                state = IN;
+            else
+			{
+				putchar(c);
+                state = SLASH;
+			}
         }
         else if (state == OUT || state == QUOTE)
             putchar(c);
+		else if (state == SLASH)
+		{
+			putchar(c);
+			state = OUT;
+		}
     }
     return 0;
 }
