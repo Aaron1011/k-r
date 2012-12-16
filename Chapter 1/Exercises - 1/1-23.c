@@ -20,25 +20,25 @@ main() /* Remove comments from input */
         }
         else if (c == '/')
         {
-			if (state == SLASH)
-				state = IN;
+            if (state == SLASH)
+                state = IN;
             else if (state == IN)
                 state = OUT;
             else if (state == QUOTE)
                 putchar(c);
             else
-			{
-				putchar(c);
+            {
+                putchar(c);
                 state = SLASH;
-			}
+            }
         }
         else if (state == OUT || state == QUOTE)
             putchar(c);
-		else if (state == SLASH)
-		{
-			putchar(c);
-			state = OUT;
-		}
+        else if (state == SLASH)
+        {
+            putchar(c);
+            state = OUT;
+        }
     }
     return 0;
 }
