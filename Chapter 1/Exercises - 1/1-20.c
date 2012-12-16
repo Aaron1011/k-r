@@ -17,15 +17,14 @@ main()
         {
             for (l = 0; l < TABSTOP; ++l)
                 str[i+l] = ' ';
-            i += l;
+            i += TABSTOP - 1;
         }
         else
-            str[i] = c;//printf("c = %cZ, str[i]= %cZ %i\n", c, str[i], i);
+            str[i] = c;
         ++i;
     }
     str[i] = '\0';
     for (l = 0; l <= i; l++)
         printf("%c", str[l]);
-    //printf("Final value: %s\n", str);
 
 }
