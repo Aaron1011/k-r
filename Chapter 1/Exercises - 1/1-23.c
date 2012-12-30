@@ -17,11 +17,11 @@ main() /* Remove comments from input */
         if (state == DEFAULT) {
             if (c == '/')
                 state = POS_COMMENT;
-            if (c == '"') {
+            else if (c == '"') {
                 state = IN_STRING;
                 putchar(c);
             }
-            if (state == '\'') {
+            else if (c == '\'') {
                 state = IN_CHAR;
                 putchar(c);
             }
@@ -33,7 +33,7 @@ main() /* Remove comments from input */
                 state = DEFAULT;
                 putchar(c);
             }
-            if (c == '\\') {
+            else if (c == '\\') {
                 state = CHAR_ESCAPE;
                 putchar(c);
             }
