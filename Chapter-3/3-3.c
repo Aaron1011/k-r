@@ -3,17 +3,24 @@
 
 #define MINCAP 65
 #define MAXCAP 90
-#define MINDIGIT 48
-#define MAXDIGIT 57
+#define MINDIGIT 0
+#define MAXDIGIT 9
 #define MINLOWER 97
 #define MAXLOWER 122
 
-#define DEFAULT 0
-#define POS_SHORTHAND 1
-#define IN_SHORTHAND 2
-
+#define START 0
+#define CHAR 1
+#define DASH 2
+#define LEAD_DASH 3
+#define FINISH_STATE 4
+#define EXIT_SHORTHAND 5
 
 void expand(char s1[], char s2[]);
+int isalphanum(char c);
+int isalpha(char c);
+int isnum(char c);
+int writechars(char firstchar, char secondchar, char outputstring[], int outputindex);
+
 
 int main() {
     int i;
@@ -22,41 +29,77 @@ int main() {
 
     for(i = 0; i <= MAXCHAR; i++)
         s1[i] = 0;
-    expand(s1, "a-Z");
+    expand("a-z0-9 Hello world 1-2-3", s1);
     printf("%s\n", s1);
 }
 
 void expand(char s1[], char s2[]) {
-    int i, j, state;
+    int i, state, s2index;
+    char lastchar;
 
-    state = DEFAULT;
+    state = START;
+    s2index = 0;
 
-    for (i = j = 0; s2[j] != '\0'; i++, j++) {
-        if (state == DEFAULT) {
-            if (s2[j]-'0' <= MAXDIGIT && s2[j]-'0' >= MINDIGIT)
-                state = POS_SHORTHAND;
-            else if (s2[j] <= MAXCAP && s2[j] <= MAXLOWER && s2[j] >= MINCAP && s2[j] >= MINLOWER)
-                state = POS_SHORTHAND;
-            s1[i] = s2[j];
+    for (i = 0; s1[i] != '\0'; i++) {
+        if (state == START) {
+            if (s1[i] == '-')
+                state = LEAD_DASH;
+            else
+                state = CHAR;
+            s2[s2index++] = lastchar = s1[i];
         }
-        else if (state == POS_SHORTHAND) {
-            if (s2[j] == '-')
-                state = IN_SHORTHAND;
+        else if (state == LEAD_DASH) {
+            if (isalphanum(s1[i])) {
+                state = CHAR;
+                s2[s2index++] = lastchar = s1[i];
+            }
             else {
-                state = DEFAULT;
-                s1[i] = s2[j];
+                printf("\nError: Non-alphanumeric character following hyphen\n");
+                return;
             }
         }
-        else if (state == IN_SHORTHAND) {
-            printf("In shorthand\n%c\n", s2[j]);
-            if (s2[j] <= MAXCAP && s2[j] >= MINCAP) {
-                for (i; s1[i] <= s2[j]; i++) {
-                    printf("In for loop, i = %i, j = %i\n", i, j);
-                    s1[i] = s2[j-2];
-                    printf("s2[j-2] = %i", s2[j-2]);
-                    s2[j-2] += 1;
-                }
+        else if (state == CHAR) {
+            if (s1[i] == '-')
+                state = DASH;
+            else
+                s2[s2index++] = lastchar = s1[i];
+
+        }
+        else if (state == DASH) {
+            if ((isalpha(lastchar) && isalpha(s1[i])) || (isnum(lastchar) && isnum(s1[i]))) {
+                s2index = writechars(lastchar+1, s1[i], s2, s2index);
+                lastchar = s1[i];
+                state = CHAR;
+            }
+            else {
+                printf("\nError: Mismatched shorthand sequence\n");
+                printf("Lastchar = %d, s1[i] = %d\n", lastchar-'0', s1[i]-'0');
+                return;
             }
         }
     }
+    s2[s2index+1] = '\0';
+}
+
+
+int isalpha(char c) {
+   return (c-'0' <= MAXCAP && c-0 >= MINCAP) || (c-'0' <= MAXLOWER && c-'0' >= MINLOWER);
+}
+
+int isnum(char c) {
+    return (c-'0' <= MAXDIGIT && c-'0' >= MINDIGIT);
+}
+
+int isalphanum(char c) {
+    return isalpha(c) && isnum(c);
+}
+
+int writechars(char firstchar, char secondchar, char outputstring[], int outputindex) {
+    char curchar = firstchar;
+
+    for (; curchar-'0' <= secondchar-'0'; curchar++, outputindex++) {
+        outputstring[outputindex] = curchar;
+        printf("Curchar = %c\n", curchar);
+    }
+    return outputindex;
 }
