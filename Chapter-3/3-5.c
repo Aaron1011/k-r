@@ -22,13 +22,11 @@ void itob(int n, char s[], int b) {
     char CHARS[MAXCHAR] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     i = 0;
-    cur_num = n % b;
 
     while (n > 0) {
-        s[i] = CHARS[cur_num];
-        n /= b;
         cur_num = n % b;
-        i++;
+        s[i++] = CHARS[cur_num];
+        n /= b;
     }
     s[i] = '\0';
     reverse(s);
