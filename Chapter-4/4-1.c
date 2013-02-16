@@ -1,23 +1,23 @@
 #include <stdio.h>
+#include <string.h>
 
 
 int strrindex(char s[], char t[]);
 
 int main() {
-    printf("strrindex(\"test test\", \"te\") = %d\n", strrindex("test test", "te"));
+    printf("%d\n", strrindex("back in the backwoods of back bay, wisconsin i hurt my back", "back"));
     return 0;
 }
 
 
 int strrindex(char s[], char t[]) {
-    int i, j, k, last_pos;
-    last_pos = -1;
+    int i, j, k;
 
-    for (i = 0; s[i] != '\0'; i++) {
-        for (j=i, k=0; t[k] != '\0' && s[j]==t[k]; j++, k++)
+    for (i = strlen(s) - 1; i != -1; i--) {
+        for (j=i, k=strlen(t) - 1; k != -1 && s[j]==t[k]; j--, k--)
             ;
-        if (k > 0 && t[k] == '\0')
-            last_pos = i;
+        if (k == -1)
+            return j + 1;
     }
-    return last_pos;
+    return -1;
 }
