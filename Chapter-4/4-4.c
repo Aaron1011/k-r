@@ -1,10 +1,12 @@
 #include <stdio.h>
-#include <math.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
+
 
 #define MAXOP   100
 #define NUMBER  '0'
+#define COMMAND '1'
 #define MAXVAL  100
 #define BUFSIZE 100
 
@@ -52,20 +54,21 @@ main () {
                 op2 = pop();
                 push((int) pop() % (int) op2);
                 break;
-            case 't':
-                printf("\t%.8g\n", nopopch());
-                break;
-            case 'd':
-                push(nopopch());
-                break;
-            case 's':
-                op1 = pop();
-                op2 = pop();
-                push(op1);
-                push(op2);
-                break;
-            case 'c':
-                clearstack();
+            case COMMAND:
+                if (!strcmp(s, "top"))
+                    printf("\t%.8g\n", nopopch());
+                else if (!strcmp(s, "duplicate"))
+                    push(nopopch());
+                else if (!strcmp(s, "swap")) {
+                    op1 = pop();
+                    op2 = pop();
+                    push(op1);
+                    push(op2);
+                }
+                else if (!strcmp(s, "clear"))
+                    clearstack();
+                else
+                    printf("Error: unknown command %s\n", s);
                 break;
             case '\n':
                 printf("\t%.8g\n", pop());
@@ -99,7 +102,8 @@ double pop(void) {
 }
 
 int getop(char s[]) {
-    int i, c, temp, place = 0;
+    int i, c, temp;
+    int place = 0;
 
     while ((s[0] = c = getch()) == ' ' || c == '\t')
         ;
@@ -115,9 +119,18 @@ int getop(char s[]) {
     else
         ungetch(temp);
 
-    if (!isdigit(c) && c != '.')
-        return c;
     i = place;
+
+    if (!isdigit(c) && c != '.') {
+        if (isalpha(c)) {
+            while (isalpha(s[++i] = c = getch()))
+                ;
+            ungetch(c);
+            s[i] = 0;
+            return COMMAND;
+        }
+        return c;
+    }
     if (isdigit(c))
         while (isdigit(s[++i] = c = getch()))
             ;
